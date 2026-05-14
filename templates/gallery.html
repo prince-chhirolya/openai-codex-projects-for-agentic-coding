@@ -47,6 +47,11 @@
             <p class="gallery-date">
               Saved {{ canvas.created_at.strftime("%B %d, %Y at %I:%M %p") }}
             </p>
+            <a
+              class="download-link"
+              href="{{ url_for('canvas.download_canvas', canvas_id=canvas.id) }}"
+              >Download PNG</a
+            >
           </div>
         </article>
         {% endfor %} {% else %}

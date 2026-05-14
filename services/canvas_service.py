@@ -1,5 +1,9 @@
 import re
+from io import BytesIO
 
+from flask import abort
+from PIL import Image
+from PIL import ImageColor
 from models import Canvas, db
 
 
@@ -16,6 +20,7 @@ COLOR_PALETTE = [
     "#ff924c",
 ]
 HEX_COLOR_PATTERN = re.compile(r"^#[0-9a-fA-F]{6}$")
+FILENAME_SLUG_PATTERN = re.compile(r"[^a-z0-9]+")
 
 
 class ValidationError(ValueError):
@@ -62,3 +67,33 @@ def create_canvas(name, pixel_data):
 
 def list_canvases():
     return Canvas.query.order_by(Canvas.created_at.desc()).all()
+
+
+def get_canvas(canvas_id):
+    canvas = db.session.get(Canvas, canvas_id)
+    if canvas is None:
+        abort(404)
+    return canvas
+
+
+def build_canvas_png(canvas, scale=16):
+    image = Image.new("RGB", (GRID_SIZE, GRID_SIZE), DEFAULT_COLOR)
+
+    for row_index, row in enumerate(canvas.pixel_data):
+        for column_index, color in enumerate(row):
+            image.putpixel((column_index, row_index), ImageColor.getrgb(color))
+
+    if scale > 1:
+        image = image.resize((GRID_SIZE * scale, GRID_SIZE * scale), Image.Resampling.NEAREST)
+
+    output = BytesIO()
+    image.save(output, format="PNG")
+    output.seek(0)
+    return output
+
+
+def build_download_filename(canvas):
+    slug = FILENAME_SLUG_PATTERN.sub("-", canvas.name.strip().lower()).strip("-")
+    if not slug:
+        slug = f"canvas-{canvas.id}"
+    return f"{slug}.png"

@@ -1,4 +1,10 @@
-# (1st Project) Building a Flask Pixel Art Canvas App using Codex
+# OpenAI Codex Projects For Agentic Coding
+
+1. [Building a Flask Pixel Art Canvas App using Codex](#1st-project-building-a-flask-pixel-art-canvas-app-using-codex)
+2. [Building a Gallery and PNG Export App using Codex](#2nd-project-building-a-gallery-and-png-export-app-using-codex)
+   <br/>
+
+## (1st Project) Building a Flask Pixel Art Canvas App using Codex
 
 ## Scaffolding the base app
 
@@ -33,7 +39,7 @@ Now we will ask Codex to add the drawing and saving feature. We describe what th
 
 Codex reads the prompt, reviews the existing files, and implements the full feature. Here is the code:
 
-**https://github.com/prince-chhirolya/building-a-flask-pixel-art-canvas-app-using-codex** (Complete Project Source Code on GitHub)
+**https://github.com/prince-chhirolya/openai-codex-projects-for-agentic-coding** (Complete Project Source Code on GitHub)
 
 Let’s see what Codex did. It created six new files and updated two existing ones:
 
@@ -52,7 +58,7 @@ Both tasks followed the same pattern: a short, outcome-focused prompt produced a
 
 ---
 
-# (2nd Project) Building a Gallery and PNG Export App using Codex
+## (2nd Project) Building a Gallery and PNG Export App using Codex
 
 ## Adding a gallery page
 
@@ -76,3 +82,25 @@ Let’s see what Codex did. It created two new files and updated four existing o
 > Looking at the project code, we can see that tests/test_canvas_routes.py now has a fourth test: test_gallery_route_shows_saved_canvases. Codex added it without being asked, inserting a canvas directly into the test database and asserting that it appears on the gallery page.
 
 The gallery page is live. We can navigate from the drawing page to the gallery and see all our saved canvases with their previews.
+
+## Adding download button for PNG export
+
+The gallery shows our saved canvases, but we have no way to get them out of the app yet. Now we will ask Codex to add a download feature. We want each gallery card to have a button that generates a PNG file of the canvas artwork. We specify Pillow here because it is already in our requirements.txt and it is the library we chose for this task.
+
+> Prompt: Add a download feature. Each canvas in the gallery should have a Download button that exports the pixel art as a PNG file. Use Pillow to generate the image.
+
+Codex reads the prompt, locates the existing gallery template and service layer, and adds the export feature. Here is the code:
+
+**https://github.com/prince-chhirolya/openai-codex-projects-for-agentic-coding** (Complete Project Source Code on GitHub)
+
+Let’s see what Codex did. It updated four existing files:
+
+- services/canvas_service.py (updated): Three new functions were added. get_canvas() fetches a single canvas by id and returns a 404 if it does not exist. build_canvas_png() creates a 32x32 Pillow image, sets each pixel using the stored hex colour values, scales it up to 512x512 using nearest-neighbour resizing to keep the pixels sharp, and returns the image as a byte buffer ready to send. build_download_filename() generates a clean filename from the canvas name, for example ocean-breeze.png.
+
+- routes/canvas.py (updated): A new GET /canvases/<id>/download route was added. It fetches the canvas, calls build_canvas_png(), and returns the buffer as a file attachment using Flask’s send_file().
+
+- templates/gallery.html (updated): A Download PNG link was added to each canvas card pointing to the download route for that canvas.
+
+- static/styles.css (updated): Styling was added for the download link button.
+
+The app is now complete. We can draw pixel art, save it, browse the gallery, and download any canvas as a PNG file.

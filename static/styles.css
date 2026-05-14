@@ -22,11 +22,7 @@ body {
   font-family: "Trebuchet MS", "Gill Sans", sans-serif;
   color: var(--text);
   background:
-    radial-gradient(
-      circle at top left,
-      rgba(255, 201, 107, 0.45),
-      transparent 24%
-    ),
+    radial-gradient(circle at top left, rgba(255, 201, 107, 0.45), transparent 24%),
     linear-gradient(135deg, #f8f3eb 0%, #eedfcf 100%);
 }
 
@@ -55,7 +51,8 @@ body {
 }
 
 .nav-link,
-.back-link {
+.back-link,
+.download-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -63,10 +60,7 @@ body {
   padding: 10px 16px;
   text-decoration: none;
   font-weight: 700;
-  transition:
-    background 120ms ease,
-    color 120ms ease,
-    transform 120ms ease;
+  transition: background 120ms ease, color 120ms ease, transform 120ms ease;
 }
 
 .nav-link {
@@ -76,7 +70,8 @@ body {
 }
 
 .nav-link:hover,
-.back-link:hover {
+.back-link:hover,
+.download-link:hover {
   transform: translateY(-1px);
 }
 
@@ -158,9 +153,7 @@ h1 {
   font: inherit;
   font-weight: 700;
   cursor: pointer;
-  transition:
-    background 120ms ease,
-    transform 120ms ease;
+  transition: background 120ms ease, transform 120ms ease;
 }
 
 .save-form button:hover {
@@ -193,9 +186,7 @@ h1 {
   background: var(--swatch-color);
   cursor: pointer;
   box-shadow: inset 0 0 0 1px rgba(44, 36, 27, 0.12);
-  transition:
-    transform 120ms ease,
-    border-color 120ms ease;
+  transition: transform 120ms ease, border-color 120ms ease;
 }
 
 .palette-swatch:hover,
@@ -273,6 +264,13 @@ h1 {
   margin: 0;
   color: var(--muted);
   line-height: 1.45;
+}
+
+.download-link {
+  margin-top: 16px;
+  background: rgba(217, 93, 57, 0.12);
+  color: var(--accent-dark);
+  border: 1px solid rgba(217, 93, 57, 0.2);
 }
 
 .gallery-empty {

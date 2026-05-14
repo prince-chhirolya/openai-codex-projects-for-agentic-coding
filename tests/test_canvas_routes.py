@@ -1,7 +1,9 @@
+from io import BytesIO
 import sys
 from pathlib import Path
 
 import pytest
+from PIL import Image
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
@@ -40,6 +42,7 @@ def test_index_route_renders_editor(client):
     assert response.status_code == 200
     assert b"Draw your first 32x32 canvas" in response.data
     assert b"pixel-canvas" in response.data
+    assert b"Gallery" in response.data
 
 
 def test_save_canvas_success(client, app):
@@ -66,3 +69,48 @@ def test_save_canvas_requires_name(client):
 
     assert response.status_code == 400
     assert response.get_json()["message"] == "Please give your canvas a name before saving."
+
+
+def test_gallery_route_shows_saved_canvases(client, app):
+    with app.app_context():
+        canvas = Canvas(
+            name="Ocean",
+            pixel_data=build_blank_pixel_data("#1982c4"),
+        )
+        db.session.add(canvas)
+        db.session.commit()
+        canvas_id = canvas.id
+
+    response = client.get("/gallery")
+
+    assert response.status_code == 200
+    assert b"Browse the pixel gallery" in response.data
+    assert b"Ocean" in response.data
+    assert b"Saved" in response.data
+    assert b"Back to drawing" in response.data
+    assert f"/canvases/{canvas_id}/download".encode() in response.data
+
+
+def test_download_canvas_returns_png(client, app):
+    with app.app_context():
+        pixel_data = build_blank_pixel_data("#ffffff")
+        pixel_data[0][0] = "#ff0000"
+        pixel_data[1][1] = "#0000ff"
+        canvas = Canvas(
+            name="Ocean Breeze",
+            pixel_data=pixel_data,
+        )
+        db.session.add(canvas)
+        db.session.commit()
+        canvas_id = canvas.id
+
+    response = client.get(f"/canvases/{canvas_id}/download")
+
+    assert response.status_code == 200
+    assert response.mimetype == "image/png"
+    assert "attachment; filename=ocean-breeze.png" in response.headers["Content-Disposition"]
+
+    image = Image.open(BytesIO(response.data))
+    assert image.size == (512, 512)
+    assert image.getpixel((0, 0)) == (255, 0, 0)
+    assert image.getpixel((16, 16)) == (0, 0, 255)
