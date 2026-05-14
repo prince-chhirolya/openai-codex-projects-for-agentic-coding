@@ -4,11 +4,77 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Pixel Art Canvas</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
   </head>
   <body>
-    <main>
-      <h1>Pixel Art Canvas</h1>
-      <p>Your 32x32 pixel editor is ready for the next step.</p>
+    <main class="layout">
+      <section class="panel intro">
+        <p class="eyebrow">Pixel Studio</p>
+        <h1>Draw your first 32x32 canvas</h1>
+        <p class="lede">
+          Pick a colour, paint directly onto the grid, and save your artwork to
+          the gallery database.
+        </p>
+
+        <form id="save-form" class="save-form">
+          <label for="canvas-name">Canvas name</label>
+          <input
+            id="canvas-name"
+            name="canvas-name"
+            type="text"
+            maxlength="255"
+            placeholder="Sunset Cat"
+            required
+          />
+          <button type="submit" id="save-button">Save canvas</button>
+        </form>
+
+        <div class="palette-wrap">
+          <p class="palette-label">Palette</p>
+          <div class="palette" id="palette">
+            {% for color in color_palette %}
+            <button
+              type="button"
+              class="palette-swatch{% if color == default_color %} active{% endif %}"
+              data-color="{{ color }}"
+              title="Select {{ color }}"
+              aria-label="Select {{ color }}"
+              style="--swatch-color: {{ color }}"
+            ></button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <p class="selected-color">
+          Selected colour:
+          <span id="selected-color-value">{{ default_color }}</span>
+        </p>
+        <p
+          id="save-status"
+          class="save-status"
+          role="status"
+          aria-live="polite"
+        ></p>
+      </section>
+
+      <section
+        class="panel canvas-panel"
+        id="canvas-editor"
+        data-grid-size="{{ grid_size }}"
+        data-default-color="{{ default_color }}"
+        data-palette="{{ color_palette | tojson }}"
+      >
+        <canvas
+          id="pixel-canvas"
+          width="576"
+          height="576"
+          aria-label="32 by 32 drawing canvas"
+        ></canvas>
+      </section>
     </main>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
   </body>
 </html>
