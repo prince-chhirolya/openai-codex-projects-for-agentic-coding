@@ -6,6 +6,7 @@ from services.canvas_service import (
     GRID_SIZE,
     ValidationError,
     create_canvas,
+    list_canvases,
 )
 
 
@@ -20,6 +21,11 @@ def index():
         default_color=DEFAULT_COLOR,
         grid_size=GRID_SIZE,
     )
+
+
+@canvas_bp.route("/gallery")
+def gallery():
+    return render_template("gallery.html", canvases=list_canvases())
 
 
 @canvas_bp.route("/canvases", methods=["POST"])

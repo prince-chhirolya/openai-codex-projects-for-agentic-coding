@@ -58,3 +58,7 @@ def create_canvas(name, pixel_data):
     db.session.add(canvas)
     db.session.commit()
     return canvas
+
+
+def list_canvases():
+    return Canvas.query.order_by(Canvas.created_at.desc()).all()

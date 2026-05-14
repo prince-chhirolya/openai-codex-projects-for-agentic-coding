@@ -22,8 +22,68 @@ body {
   font-family: "Trebuchet MS", "Gill Sans", sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(255, 201, 107, 0.45), transparent 24%),
+    radial-gradient(
+      circle at top left,
+      rgba(255, 201, 107, 0.45),
+      transparent 24%
+    ),
     linear-gradient(135deg, #f8f3eb 0%, #eedfcf 100%);
+}
+
+.topbar {
+  width: min(1120px, calc(100% - 32px));
+  margin: 24px auto 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.brand {
+  color: var(--text);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nav-link,
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 10px 16px;
+  text-decoration: none;
+  font-weight: 700;
+  transition:
+    background 120ms ease,
+    color 120ms ease,
+    transform 120ms ease;
+}
+
+.nav-link {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(44, 36, 27, 0.08);
+}
+
+.nav-link:hover,
+.back-link:hover {
+  transform: translateY(-1px);
+}
+
+.nav-link.active,
+.back-link {
+  background: var(--accent);
+  color: #fff8f2;
 }
 
 .layout {
@@ -98,7 +158,9 @@ h1 {
   font: inherit;
   font-weight: 700;
   cursor: pointer;
-  transition: background 120ms ease, transform 120ms ease;
+  transition:
+    background 120ms ease,
+    transform 120ms ease;
 }
 
 .save-form button:hover {
@@ -131,7 +193,9 @@ h1 {
   background: var(--swatch-color);
   cursor: pointer;
   box-shadow: inset 0 0 0 1px rgba(44, 36, 27, 0.12);
-  transition: transform 120ms ease, border-color 120ms ease;
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease;
 }
 
 .palette-swatch:hover,
@@ -164,6 +228,57 @@ h1 {
   justify-content: center;
 }
 
+.gallery-layout {
+  width: min(1120px, calc(100% - 32px));
+  margin: 24px auto 32px;
+  display: grid;
+  gap: 24px;
+}
+
+.gallery-hero {
+  padding: 28px;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.gallery-card {
+  overflow: hidden;
+}
+
+.gallery-preview {
+  width: 100%;
+  display: block;
+  aspect-ratio: 1 / 1;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(44, 36, 27, 0.1);
+  image-rendering: pixelated;
+}
+
+.gallery-card-body {
+  padding: 18px 18px 20px;
+}
+
+.gallery-card-body h2,
+.gallery-empty h2 {
+  margin: 0 0 10px;
+  font-size: 1.3rem;
+}
+
+.gallery-date,
+.gallery-empty p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.gallery-empty {
+  padding: 24px;
+}
+
 #pixel-canvas {
   width: min(100%, 576px);
   height: auto;
@@ -176,12 +291,18 @@ h1 {
 }
 
 @media (max-width: 900px) {
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
   .layout {
     grid-template-columns: 1fr;
   }
 
   .intro,
-  .canvas-panel {
+  .canvas-panel,
+  .gallery-hero {
     padding: 22px;
   }
 }

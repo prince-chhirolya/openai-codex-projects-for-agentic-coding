@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gallery | Pixel Art Canvas</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="{{ url_for('canvas.index') }}">Pixel Studio</a>
+      <nav class="nav-links" aria-label="Primary">
+        <a class="nav-link" href="{{ url_for('canvas.index') }}">Draw</a>
+        <a class="nav-link active" href="{{ url_for('canvas.gallery') }}"
+          >Gallery</a
+        >
+      </nav>
+    </header>
+    <main class="gallery-layout">
+      <section class="panel gallery-hero">
+        <p class="eyebrow">Saved Canvases</p>
+        <h1>Browse the pixel gallery</h1>
+        <p class="lede">
+          Every saved drawing appears here with its name, save date, and a live
+          preview of the artwork.
+        </p>
+        <a class="back-link" href="{{ url_for('canvas.index') }}"
+          >Back to drawing</a
+        >
+      </section>
+
+      <section class="gallery-grid" aria-label="Saved canvases">
+        {% if canvases %} {% for canvas in canvases %}
+        <article class="panel gallery-card">
+          <canvas
+            class="gallery-preview"
+            width="192"
+            height="192"
+            data-pixel-data="{{ canvas.pixel_data | tojson }}"
+            aria-label="Preview of {{ canvas.name }}"
+          ></canvas>
+          <div class="gallery-card-body">
+            <h2>{{ canvas.name }}</h2>
+            <p class="gallery-date">
+              Saved {{ canvas.created_at.strftime("%B %d, %Y at %I:%M %p") }}
+            </p>
+          </div>
+        </article>
+        {% endfor %} {% else %}
+        <article class="panel gallery-empty">
+          <h2>No saved canvases yet</h2>
+          <p>
+            Create your first artwork on the drawing page and it will show up
+            here.
+          </p>
+          <a class="back-link" href="{{ url_for('canvas.index') }}"
+            >Start drawing</a
+          >
+        </article>
+        {% endif %}
+      </section>
+    </main>
+    <script src="{{ url_for('static', filename='gallery.js') }}"></script>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-# Building a Flask Pixel Art Canvas App using Codex
+# (1st Project) Building a Flask Pixel Art Canvas App using Codex
 
 ## Scaffolding the base app
 
@@ -48,4 +48,31 @@ The drawing interface is now live. We can paint on the grid, pick a colour, ente
 
 Both tasks followed the same pattern: a short, outcome-focused prompt produced a complete, well-structured implementation. The prompts described what to build and AGENTS.md handled the conventions behind the scenes. Codex applied the project structure, kept business logic in service functions, and even wrote and ran tests without being asked. Writing good prompts and a well-defined AGENTS.md is what makes this possible.
 
-XXXXXX Completed XXXXXX
+---
+
+---
+
+# (2nd Project) Building a Gallery and PNG Export App using Codex
+
+## Adding a gallery page
+
+Now we will ask Codex to add the gallery page. The drawing page already has a way to save canvases, so this task is about giving us somewhere to browse them. We describe the page from the user’s perspective and let Codex handle the structure. Here is the prompt:
+
+> Prompt: Add a gallery page that shows all saved canvases. Each canvas should display its name, the date it was saved, and a visual preview of the pixel art. The gallery should be accessible from the main drawing page and link back to it.
+
+Codex reads the prompt, checks the existing routes and templates, and builds the full gallery feature.
+
+Let’s see what Codex did. It created two new files and updated four existing ones:
+
+- templates/gallery.html: A new page with a navigation bar at the top, a hero section with a heading and description, and a responsive grid of canvas cards. Each card shows a pixel preview of the artwork, the canvas name, and the formatted save date. An empty state message is shown when no canvases have been saved yet.
+- static/gallery.js: A new JavaScript file that reads the pixel data stored in each card and renders it onto a small canvas element as a pixel preview.
+- routes/canvas.py (updated): A new GET /gallery route was added that fetches all saved canvases and passes them to the gallery template.
+- services/canvas_service.py (updated): A new list_canvases() function was added that queries all canvas rows from the database ordered by save date, newest first.
+- templates/index.html (updated): A navigation bar was added to the drawing page so we can switch between the editor and the gallery.
+- static/styles.css (updated): New styles were added for the gallery layout, canvas cards, pixel previews, and the shared navigation bar.
+
+> Note: Codex updated the tests again
+>
+> Looking at the project code, we can see that tests/test_canvas_routes.py now has a fourth test: test_gallery_route_shows_saved_canvases. Codex added it without being asked, inserting a canvas directly into the test database and asserting that it appears on the gallery page.
+
+The gallery page is live. We can navigate from the drawing page to the gallery and see all our saved canvases with their previews.

@@ -10,6 +10,13 @@
     />
   </head>
   <body>
+    <header class="topbar">
+      <a class="brand" href="{{ url_for('canvas.index') }}">Pixel Studio</a>
+      <nav class="nav-links" aria-label="Primary">
+        <a class="nav-link active" href="{{ url_for('canvas.index') }}">Draw</a>
+        <a class="nav-link" href="{{ url_for('canvas.gallery') }}">Gallery</a>
+      </nav>
+    </header>
     <main class="layout">
       <section class="panel intro">
         <p class="eyebrow">Pixel Studio</p>
